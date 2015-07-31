@@ -5,7 +5,7 @@
     "Dede Hidayat <dede.hidayat@gmail.com>"
   ],
   "description": "Module for simplify web sigin using social media account",
-  "main": "dist/angular-social-signin.js",
+  "main": "./angular-social-signin.js",
   "moduleType": [
     "es6",
     "globals"

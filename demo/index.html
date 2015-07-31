@@ -19,19 +19,33 @@
     <![endif]-->
 
     <!-- Add your site or application content here -->
-    <div ng-controller="MainCtrl" class="row text-center">
+    <div ng-controller="MainCtrl" class="container">
         
-        <p>Anda belum login menggunakan akun manapun</p>
+        <div class="row text-center">
+          <p>Anda belum login menggunakan akun manapun</p>
 
-        <a class="btn btn-sm btn-social btn-twitter" href="javascript:void(0)" ng-click="loginTwitter()">
-          <i class="fa fa-twitter"></i><span>Sign In</span>
-        </a>
-        <a class="btn btn-sm btn-social btn-facebook" href="javascript:void(0)" ng-click="loginFacebook()">
-          <i class="fa fa-facebook"></i><span>Sign In</span>
-        </a>
-        <a class="btn btn-sm btn-social btn-google" href="javascript:void(0)" ng-click="loginGoogle()">
-          <i class="fa fa-google"></i><span>Sign In</span>
-        </a>
+          <a class="btn btn-sm btn-social btn-twitter" href="javascript:void(0)" ng-click="loginTwitter()">
+            <i class="fa fa-twitter"></i><span>Sign In</span>
+          </a>
+          <a class="btn btn-sm btn-social btn-facebook" href="javascript:void(0)" ng-click="loginFacebook()">
+            <i class="fa fa-facebook"></i><span>Sign In</span>
+          </a>
+          <a class="btn btn-sm btn-social btn-google" href="javascript:void(0)" ng-click="loginGoogle()">
+            <i class="fa fa-google"></i><span>Sign In</span>
+          </a>
+        </div>
+
+        <div class="row">
+          <div class="col-md-4"></div>
+          <div class="col-md-4"></div>
+          <div class="col-md-4" ng-show="googleAccount">
+            <h1>Google Account</h1>
+            <a href="#" ng-href="{{googleAccount.url}}" target="_blank"> <img ng-src="{{ googleAccount.image.url }}" class="img-circle"></a>
+            <p>{{ googleAccount.displayName }}</p>
+            <p>{{ googleAccount.occupation }}</p>
+            <p>{{ googleAccount.gender }}</p>
+          </div>
+        </div>
     </div>
 
     <script>
@@ -49,7 +63,7 @@
     <!-- endbower -->
 
     <!-- build:js({.tmp,app}) dist/angular-social-signin.js -->
-    <script src="../src/main.js"></script>
+    <script src="../angular-social-signin.js"></script>
     <!-- endbuild -->
 
     <script type="text/javascript">
@@ -77,11 +91,24 @@
             });
           };
 
+          $scope.googleAccount = null;
           $scope.loginGoogle = function() {
-            angularSocialSignin.google.login().then(function(response) {
-              console.info('angularSocialSignin.google.login response', response)
-            }, function(data) {
-            });
+            if(angularSocialSignin.google.auth2.isSignedIn.get()) {
+              angularSocialSignin.google.getProfile().then(function(response){
+                $scope.$apply(function(){
+                  $scope.googleAccount = response.result;
+                });
+              })
+            } else {
+              angularSocialSignin.google.signIn().then(function(response) {
+                angularSocialSignin.google.getProfile().then(function(response){
+                  $scope.$apply(function(){
+                    $scope.googleAccount = response.result;
+                  });
+                })
+              }, function(data) {
+              });
+            }
           };
       })
       .run(function(angularSocialSignin){
