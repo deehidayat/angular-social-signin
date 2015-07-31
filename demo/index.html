@@ -37,13 +37,21 @@
 
         <div class="row">
           <div class="col-md-4"></div>
-          <div class="col-md-4"></div>
+          
+          <div class="col-md-4">
+            <div class="container" ng-show="facebookAccount">
+              {{ facebookAccount | json }}
+            </div>
+          </div>
+
           <div class="col-md-4" ng-show="googleAccount">
-            <h1>Google Account</h1>
-            <a href="#" ng-href="{{googleAccount.url}}" target="_blank"> <img ng-src="{{ googleAccount.image.url }}" class="img-circle"></a>
-            <p>{{ googleAccount.displayName }}</p>
-            <p>{{ googleAccount.occupation }}</p>
-            <p>{{ googleAccount.gender }}</p>
+            <div class="container" ng-show="googleAccount">
+              <h1>Google Account</h1>
+              <a href="#" ng-href="{{googleAccount.url}}" target="_blank"> <img ng-src="{{ googleAccount.image.url }}" class="img-circle"></a>
+              <p>{{ googleAccount.displayName }}</p>
+              <p>{{ googleAccount.occupation }}</p>
+              <p>{{ googleAccount.gender }}</p>
+            </div>
           </div>
         </div>
     </div>
@@ -72,6 +80,9 @@
         angularSocialSigninProvider.setConfig({
           google: {
             id: '350117993109-68664d44tpv63dfpf2lebq71vqqunv0f.apps.googleusercontent.com'
+          },
+          facebook: {
+            id: '1622675498004956'
           }
         })
       })
@@ -85,10 +96,17 @@
           };
 
           $scope.loginFacebook = function() {
-            angularSocialSignin.facebook.login().then(function(response) {
-              console.info('angularSocialSignin.facebook.login response', response)
-            }, function(data) {
-            });
+            if(!angularSocialSignin.facebook.auth2 || angularSocialSignin.facebook.auth2.status !== 'connected') {
+              angularSocialSignin.facebook.signIn().then(function(response) {
+                angularSocialSignin.facebook.getProfile().then(function(response) {
+                    $scope.facebookAccount = response;
+                });
+              });
+            } else {
+              angularSocialSignin.facebook.getProfile().then(function(response) {
+                  $scope.facebookAccount = response;
+              });
+            }
           };
 
           $scope.googleAccount = null;

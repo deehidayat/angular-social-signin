@@ -70,8 +70,69 @@ angular.module('angular-social-signin', [])
         }
       }
 
+      function FacebookSignin() {
+        var self = this;
+
+        // Facebook SDK
+        $window.fbAsyncInit = function() {
+          FB.init({
+              appId: selfModule.config.facebook.id, // App ID
+              channelUrl:'/channel.html', // Channel File
+              status:true, // check login status
+              cookie:true, // enable cookies to allow the server to access the
+              // session
+              xfbml:true, // parse XFBML
+              version: 'v2.4'
+          });
+          FB.Event.subscribe('auth.authResponseChange', function(response) {
+              self.auth2 = response;
+          });
+        }; 
+        ( function(d) {
+            var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+            if (d.getElementById(id)) {
+                return;
+            }
+            js = d.createElement('script');
+            js.id = id;
+            js.async = true;
+            js.src = "//connect.facebook.net/en_US/sdk.js";
+            ref.parentNode.insertBefore(js, ref);
+        }(document));
+
+      }
+
+      FacebookSignin.prototype = {
+        auth2: null,
+
+        signIn: function() {
+          var defered = $q.defer();
+          FB.login(function(response) {
+            defered.resolve(response);
+          }, { scope: 'public_profile,email,user_friends' });
+          return defered.promise;  
+        },
+
+        signOut: function() {
+          var defered = $q.defer();
+          FB.logout(function(response) {
+              defered.resolve(response);
+          });
+          return defered.promise;
+        },
+
+        getProfile: function() {
+          var defered = $q.defer();
+          FB.api('/me', function(response) {
+            defered.resolve(response);
+          });
+          return defered.promise;
+        }
+      }
+
       return {
-        google: new GoogleSignin()
+        google: new GoogleSignin(),
+        facebook: new FacebookSignin()
       }
     };
   });
