@@ -1,0 +1,22 @@
+{
+  "name": "angular-social-sigin",
+  "version": "1.0.0",
+  "description": "Module for simplify web sigin using social media account",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-wiredep": "^2.0.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Angular",
+    "Social",
+    "Sign",
+    "In"
+  ],
+  "author": "Dede Hidayat <deehieday@gmail.com>",
+  "license": "MIT"
+}

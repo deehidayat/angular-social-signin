@@ -1,0 +1,92 @@
+<!doctype html>
+<html class="no-js" ng-app="socialSigninApp">
+  <head>
+    <meta name="fragment" content="!" />
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <!-- bower:css -->
+    <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="../bower_components/font-awesome/css/font-awesome.css" />
+    <link rel="stylesheet" href="../bower_components/bootstrap-social/bootstrap-social.css" />
+    <!-- endbower -->
+  </head>
+  <body>
+    <!--[if lt IE 7]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+
+    <!-- Add your site or application content here -->
+    <div ng-controller="MainCtrl" class="row text-center">
+        
+        <p>Anda belum login menggunakan akun manapun</p>
+
+        <a class="btn btn-sm btn-social btn-twitter" href="javascript:void(0)" ng-click="loginTwitter()">
+          <i class="fa fa-twitter"></i><span>Sign In</span>
+        </a>
+        <a class="btn btn-sm btn-social btn-facebook" href="javascript:void(0)" ng-click="loginFacebook()">
+          <i class="fa fa-facebook"></i><span>Sign In</span>
+        </a>
+        <a class="btn btn-sm btn-social btn-google" href="javascript:void(0)" ng-click="loginGoogle()">
+          <i class="fa fa-google"></i><span>Sign In</span>
+        </a>
+    </div>
+
+    <script>
+       !function(A,n,g,u,l,a,r){A.GoogleAnalyticsObject=l,A[l]=A[l]||function(){
+       (A[l].q=A[l].q||[]).push(arguments)},A[l].l=+new Date,a=n.createElement(g),
+       r=n.getElementsByTagName(g)[0],a.src=u,r.parentNode.insertBefore(a,r)
+       }(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+       ga('create', 'UA-XXXXX-X');
+       ga('send', 'pageview');
+    </script>
+
+    <!-- bower:js -->
+    <script src="../bower_components/angular/angular.js"></script>
+    <!-- endbower -->
+
+    <!-- build:js({.tmp,app}) dist/angular-social-signin.js -->
+    <script src="../src/main.js"></script>
+    <!-- endbuild -->
+
+    <script type="text/javascript">
+      angular.module('socialSigninApp', ['angular-social-signin'])
+      .config(function(angularSocialSigninProvider) {
+        angularSocialSigninProvider.setConfig({
+          google: {
+            id: '350117993109-68664d44tpv63dfpf2lebq71vqqunv0f.apps.googleusercontent.com'
+          }
+        })
+      })
+      .controller('MainCtrl', function($scope, angularSocialSignin){
+
+          $scope.loginTwitter = function() {
+            angularSocialSignin.twitter.login().then(function(response) {
+              console.info('angularSocialSignin.twitter.login response', response)
+            }, function(data) {
+            });
+          };
+
+          $scope.loginFacebook = function() {
+            angularSocialSignin.facebook.login().then(function(response) {
+              console.info('angularSocialSignin.facebook.login response', response)
+            }, function(data) {
+            });
+          };
+
+          $scope.loginGoogle = function() {
+            angularSocialSignin.google.login().then(function(response) {
+              console.info('angularSocialSignin.google.login response', response)
+            }, function(data) {
+            });
+          };
+      })
+      .run(function(angularSocialSignin){
+        console.info('angularSocialSignin provider', angularSocialSignin);
+      });
+    </script>
+</body>
+</html>
